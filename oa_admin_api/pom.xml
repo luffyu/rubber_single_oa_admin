@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.11.RELEASE</version>
+	</parent>
+
+	<artifactId>oa_admin_api</artifactId>
+	<version>1.0.1-SNAPSHOT</version>
+	<name>oa_admin_api</name>
+
+	<properties>
+		<rubber.version>1.0-SNAPSHOT</rubber.version>
+		<java.version>1.8</java.version>
+		<log4j.version>1.1</log4j.version>
+
+		<mysql-connector.version>8.0.21</mysql-connector.version>
+		<druid.version>1.2.1</druid.version>
+		<springboot.version>2.2.11.RELEASE</springboot.version>
+		<mybatis-plus.version>3.4.0</mybatis-plus.version>
+
+		<rubber-admin.version>1.0.1</rubber-admin.version>
+
+	</properties>
+
+
+	<dependencies>
+
+		<!--常用Spring包-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.rubber.admin</groupId>
+			<artifactId>springboot-rubber-admin-start</artifactId>
+			<version>${rubber-admin.version}</version>
+			<systemPath>${project.basedir}/src/main/resources/lib/springboot-rubber-admin-start-1.0.1.jar</systemPath>
+		</dependency>
+
+	</dependencies>
+
+
+	<profiles>
+		<!--开发环境-->
+		<profile>
+			<id>dev</id>
+			<properties>
+				<projectActive>dev</projectActive>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<!--测试分支-->
+		<profile>
+			<id>release</id>
+			<properties>
+				<projectActive>release</projectActive>
+			</properties>
+		</profile>
+
+
+		<!--生产环境-->
+		<profile>
+			<id>master</id>
+			<properties>
+				<projectActive>master</projectActive>
+			</properties>
+		</profile>
+
+	</profiles>
+
+
+
+	<build>
+
+		<finalName>rubber_single_oa_admin</finalName>
+
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.ttf</exclude>
+					<exclude>**/*.woff</exclude>
+				</excludes>
+			</resource>
+
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/*.ttf</include>
+					<include>**/*.woff</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+					<includeSystemScope>true</includeSystemScope>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<configuration>
+					<imageName>${project.name}:${project.version}</imageName>
+					<dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+					<skipDockerBuild>false</skipDockerBuild>
+					<resources>
+						<resource>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>
